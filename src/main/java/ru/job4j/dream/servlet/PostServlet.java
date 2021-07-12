@@ -18,7 +18,7 @@ public class PostServlet extends HttpServlet {
                 new Post(
                         Integer.parseInt(req.getParameter("id")),
                         req.getParameter("name"),
-                        "", LocalDate.now() ));
+                        req.getParameter("description"), LocalDate.now() ));
         resp.sendRedirect(req.getContextPath() + "/posts.jsp");
     }
 }
