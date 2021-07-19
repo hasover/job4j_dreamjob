@@ -1,6 +1,8 @@
 package ru.job4j.dream.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
@@ -14,6 +16,7 @@ import java.util.*;
 public class PsqlStore implements Store {
 
     private final BasicDataSource pool = new BasicDataSource();
+    private final Logger log = LoggerFactory.getLogger(PsqlStore.class.getName());
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -58,7 +61,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
         return posts;
     }
@@ -74,7 +77,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
         return candidates;
     }
@@ -98,7 +101,7 @@ public class PsqlStore implements Store {
             ps.setInt(4, post.getId());
             ps.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
     }
 
@@ -116,7 +119,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
     }
 
@@ -136,7 +139,7 @@ public class PsqlStore implements Store {
             ps.setInt(2, candidate.getId());
             ps.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
     }
 
@@ -152,7 +155,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
     }
 
@@ -167,7 +170,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
         return null;
     }
@@ -183,7 +186,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
         return null;
     }
@@ -195,7 +198,7 @@ public class PsqlStore implements Store {
             st.setInt(1, id);
             st.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in PsqlStore:", e);
         }
     }
 }
