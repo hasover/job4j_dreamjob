@@ -22,6 +22,34 @@
 </head>
 <body>
 <div class="container pt-3">
+    <div class="row">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/posts.do">Вакансии</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidates.do">Кандидаты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
+                    <c:if test="${user == null}">
+                        <c:out value="Войти"/>
+                    </c:if>
+                    <c:if test="${user != null}">
+                        <c:out value="${user.name}"/> | Выйти
+                    </c:if>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container pt-3">
 
     <div class="row">
         <div class="card" style="width: 100%">
