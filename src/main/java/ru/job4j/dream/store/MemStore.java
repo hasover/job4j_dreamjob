@@ -49,11 +49,6 @@ public class MemStore implements Store {
     }
 
     @Override
-    public Collection<User> findAllUsers() {
-        return users.values();
-    }
-
-    @Override
     public void save(Post post) {
         if (post.getId() == 0) {
             post.setId(POST_ID.incrementAndGet());
@@ -90,6 +85,16 @@ public class MemStore implements Store {
     @Override
     public User findUserById(int id) {
         return users.get(id);
+    }
+
+    @Override
+    public User findUserByMail(String mail) {
+        for(User user : users.values()) {
+            if (user.getEmail().equals(mail)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override

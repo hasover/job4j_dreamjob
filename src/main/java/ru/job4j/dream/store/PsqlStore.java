@@ -84,23 +84,6 @@ public class PsqlStore implements Store {
     }
 
     @Override
-    public Collection<User> findAllUsers() {
-        List<User> users = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM user")) {
-            try(ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    users.add(new User(it.getInt("id"), it.getString("name"),
-                            it.getString("email"), it.getString("password")));
-                }
-            }
-        } catch (Exception e) {
-            log.error("Exception in PsqlStore:", e);
-        }
-        return users;
-    }
-
-    @Override
     public void save(Post post) {
         if (post.getId() == 0) {
             create(post);
@@ -257,6 +240,23 @@ public class PsqlStore implements Store {
             try(ResultSet it = st.executeQuery()) {
                 if (it.next()) {
                     return new User(id, it.getString("name"),
+                            it.getString("email"), it.getString("password"));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Exception in PsqlStore:", e);
+        }
+        return null;
+    }
+
+    @Override
+    public User findUserByMail(String mail) {
+        try(Connection cn = pool.getConnection();
+            PreparedStatement st = cn.prepareStatement("select * from user where email = (?)")) {
+            st.setString(1, mail);
+            try(ResultSet it = st.executeQuery()) {
+                if (it.next()) {
+                    return new User(it.getInt("id"), it.getString("name"),
                             it.getString("email"), it.getString("password"));
                 }
             }
