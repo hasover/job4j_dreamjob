@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -83,6 +84,23 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public Collection<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM user")) {
+            try(ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    users.add(new User(it.getInt("id"), it.getString("name"),
+                            it.getString("email"), it.getString("password")));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Exception in PsqlStore:", e);
+        }
+        return users;
+    }
+
+    @Override
     public void save(Post post) {
         if (post.getId() == 0) {
             create(post);
@@ -129,6 +147,46 @@ public class PsqlStore implements Store {
             create(candidate);
         } else {
             update(candidate);
+        }
+    }
+
+    @Override
+    public void save(User user) {
+        if (user.getId() == 0) {
+            create(user);
+        } else {
+            update(user);
+        }
+    }
+
+    private void update(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("UPDATE user SET name = (?), email = (?), password = (?) WHERE id = (?)")) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
+            ps.execute();
+        } catch (Exception e) {
+            log.error("Exception in PsqlStore:", e);
+        }
+    }
+
+    private void create(User user) {
+        try(Connection cn = pool.getConnection();
+            PreparedStatement ps = cn.prepareStatement("INSERT INTO user(name, email, password) " +
+                    "VALUES (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try(ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    user.setId(rs.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Exception in PsqlStore:", e);
         }
     }
 
@@ -183,6 +241,23 @@ public class PsqlStore implements Store {
             try(ResultSet it = st.executeQuery()) {
                 if (it.next()) {
                     return new Candidate(id, it.getString("name"));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Exception in PsqlStore:", e);
+        }
+        return null;
+    }
+
+    @Override
+    public User findUserById(int id) {
+        try(Connection cn = pool.getConnection();
+            PreparedStatement st = cn.prepareStatement("select * from user where id = (?)")) {
+            st.setInt(1, id);
+            try(ResultSet it = st.executeQuery()) {
+                if (it.next()) {
+                    return new User(id, it.getString("name"),
+                            it.getString("email"), it.getString("password"));
                 }
             }
         } catch (Exception e) {
