@@ -144,7 +144,7 @@ public class PsqlStore implements Store {
 
     private void update(User user) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE user SET name = (?), email = (?), password = (?) WHERE id = (?)")) {
+             PreparedStatement ps = cn.prepareStatement("UPDATE \"user\" SET name = (?), email = (?), password = (?) WHERE id = (?)")) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
@@ -157,7 +157,7 @@ public class PsqlStore implements Store {
 
     private void create(User user) {
         try(Connection cn = pool.getConnection();
-            PreparedStatement ps = cn.prepareStatement("INSERT INTO user(name, email, password) " +
+            PreparedStatement ps = cn.prepareStatement("INSERT INTO \"user\"(name, email, password) " +
                     "VALUES (?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -235,7 +235,7 @@ public class PsqlStore implements Store {
     @Override
     public User findUserById(int id) {
         try(Connection cn = pool.getConnection();
-            PreparedStatement st = cn.prepareStatement("select * from user where id = (?)")) {
+            PreparedStatement st = cn.prepareStatement("select * from \"user\" where id = (?)")) {
             st.setInt(1, id);
             try(ResultSet it = st.executeQuery()) {
                 if (it.next()) {
@@ -252,7 +252,7 @@ public class PsqlStore implements Store {
     @Override
     public User findUserByMail(String mail) {
         try(Connection cn = pool.getConnection();
-            PreparedStatement st = cn.prepareStatement("select * from user where email = (?)")) {
+            PreparedStatement st = cn.prepareStatement("select * from \"user\" where email = (?)")) {
             st.setString(1, mail);
             try(ResultSet it = st.executeQuery()) {
                 if (it.next()) {
