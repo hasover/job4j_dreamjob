@@ -7,11 +7,13 @@ import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
+import javax.validation.ConstraintViolationException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class PsqlStore implements Store {
@@ -150,8 +152,11 @@ public class PsqlStore implements Store {
             ps.setString(3, user.getPassword());
             ps.setInt(4, user.getId());
             ps.execute();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error("Exception in PsqlStore:", e);
+            if (e.getErrorCode() == 0) {
+                throw new ConstraintViolationException("Данный email зарегистрирован", null);
+            }
         }
     }
 
@@ -168,11 +173,13 @@ public class PsqlStore implements Store {
                     user.setId(rs.getInt(1));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error("Exception in PsqlStore:", e);
+            if (e.getErrorCode() == 0) {
+                throw new ConstraintViolationException("Данный email зарегистрирован", null);
+            }
         }
     }
-
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = (?) WHERE id = (?)")) {

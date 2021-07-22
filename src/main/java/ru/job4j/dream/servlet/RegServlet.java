@@ -15,9 +15,6 @@ public class RegServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         try {
-            if (PsqlStore.instOf().findUserByMail(email) != null) {
-                throw new ConstraintViolationException("Пользователь уже существует", null);
-            }
             PsqlStore.instOf().save(new User(0, name, email, password));
             req.getRequestDispatcher("auth.do").forward(req, resp);
         } catch (ConstraintViolationException ex) {
