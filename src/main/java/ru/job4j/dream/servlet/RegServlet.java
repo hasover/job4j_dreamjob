@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.validation.ConstraintViolationException;
 
 public class RegServlet extends HttpServlet {
     @Override
@@ -13,15 +14,15 @@ public class RegServlet extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        if (name.trim().equals("") || email.trim().equals("") || password.trim().equals("")) {
-            req.setAttribute("error", "Нужно заполнить все поля");
-            req.getRequestDispatcher("reg.jsp").forward(req, resp);
-        } else if (PsqlStore.instOf().findUserByMail(email) != null) {
-            req.setAttribute("error", "Пользователь уже существует");
-            req.getRequestDispatcher("reg.jsp").forward(req, resp);
-        } else {
+        try {
+            if (PsqlStore.instOf().findUserByMail(email) != null) {
+                throw new ConstraintViolationException("Пользователь уже существует", null);
+            }
             PsqlStore.instOf().save(new User(0, name, email, password));
             req.getRequestDispatcher("auth.do").forward(req, resp);
+        } catch (ConstraintViolationException ex) {
+            req.setAttribute("error", ex.getMessage());
+            req.getRequestDispatcher("reg.jsp").forward(req, resp);
         }
     }
 }
