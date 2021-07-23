@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
-
-import javax.validation.ConstraintViolationException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
@@ -154,9 +152,7 @@ public class PsqlStore implements Store {
             ps.execute();
         } catch (SQLException e) {
             log.error("Exception in PsqlStore:", e);
-            if (e.getErrorCode() == 0) {
-                throw new ConstraintViolationException("Данный email зарегистрирован", null);
-            }
+            throw new IllegalArgumentException("Данный email зарегистрирован");
         }
     }
 
@@ -175,9 +171,7 @@ public class PsqlStore implements Store {
             }
         } catch (SQLException e) {
             log.error("Exception in PsqlStore:", e);
-            if (e.getErrorCode() == 0) {
-                throw new ConstraintViolationException("Данный email зарегистрирован", null);
-            }
+                throw new IllegalArgumentException("Данный email зарегистрирован");
         }
     }
     private void update(Candidate candidate) {

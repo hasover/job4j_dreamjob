@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import javax.validation.ConstraintViolationException;
 
 public class RegServlet extends HttpServlet {
     @Override
@@ -17,7 +16,7 @@ public class RegServlet extends HttpServlet {
         try {
             PsqlStore.instOf().save(new User(0, name, email, password));
             req.getRequestDispatcher("auth.do").forward(req, resp);
-        } catch (ConstraintViolationException ex) {
+        } catch (IllegalArgumentException ex) {
             req.setAttribute("error", ex.getMessage());
             req.getRequestDispatcher("reg.jsp").forward(req, resp);
         }
