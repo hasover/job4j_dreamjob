@@ -74,6 +74,9 @@ public class MemStore implements Store {
         if (user.getId() == 0) {
             user.setId(USER_ID.incrementAndGet());
         }
+        if (findUserByMail(user.getEmail()) != null) {
+            throw new IllegalArgumentException("Данный email зарегистрирован");
+        }
         users.put(user.getId(), user);
     }
 
