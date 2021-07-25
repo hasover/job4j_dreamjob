@@ -30,7 +30,7 @@ public class RemoveServletTest {
         Mockito.when(PsqlStore.instOf()).thenReturn(store);
 
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        Mockito.when(request.getParameter("id")).thenReturn("" + candidate.getId());
+        Mockito.when(request.getParameter("id")).thenReturn(String.valueOf(candidate.getId()));
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
         new RemoveServlet().doGet(request, response);
