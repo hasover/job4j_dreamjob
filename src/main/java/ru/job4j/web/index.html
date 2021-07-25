@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
+        var count = 1;
         function validate() {
             var value = $('#first_name').val();
             if (value === "") {
@@ -22,7 +23,25 @@
             value = $('#description').val();
             if (value === "") {
                 alert($('#description').attr('title'));
+                return;
             }
+            return true;
+        }
+
+        function addRow() {
+            if (!validate()) {
+                return;
+            }
+            const fNmame = $('#first_name').val();
+            const lName = $('#last_name').val();
+            const sex = $('#sex').val();
+            const description = $('#description').val();
+            $('#table tr:last').after('<tr><th>' + count + '</th>' +
+                '<th>' + fNmame + '</th>' +
+                '<th>' + lName + '</th>' +
+                '<th>' + sex + '</th>' +
+                '<th>' + description + '</th></tr>');
+            count++;
         }
     </script>
 </head>
@@ -49,13 +68,13 @@
             <label for="description">Описание</label>
             <textarea class="form-control" id="description" title="Заполните описание." rows="3"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" onclick="return validate();">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="addRow()">Add row</button>
     </form>
     </div>
 </div>
 <div class="container pt-3">
     <div class="row">
-        <table class="table">
+        <table class="table" id="table">
             <thead>
             <tr>
                 <th scope="col">#</th>
@@ -68,7 +87,6 @@
             <tbody>
             <tr>
             </tr>
-            <tr>
         </table>
     </div>
 </div>
