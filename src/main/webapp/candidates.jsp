@@ -19,6 +19,24 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Работа мечты</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+    <script>
+        $(document).ready(function (){
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/job4j_dreamjob/city',
+                dataType: 'json'
+            }).done(function (data) {
+                var tds = document.getElementsByClassName('city_id');
+                for(let i = 0; i < tds.length; i++) {
+                    let city = tds[i].id;
+                    tds[i].innerHTML = data[city - 1];
+                }
+            }).fail(function (err) {
+                console.log(err);
+            })
+        });
+    </script>
 </head>
 <body>
 <div class="container pt-3">
@@ -62,6 +80,7 @@
                     <tr>
                         <th scope="col">Имя кандидата</th>
                         <th scope="col">Фото</th>
+                        <th scope="col">Город</th>
                         <th scope="col">Редактировать</th>
                     </tr>
                     </thead>
@@ -76,6 +95,8 @@
                         </td>
                         <td>
                             <img src='<c:url value="/download?id=${candidate.id}"/>' width="100px" height="100px" />
+                        </td>
+                        <td class="city_id" id='<c:url value="${candidate.city_id}"/>'>
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">

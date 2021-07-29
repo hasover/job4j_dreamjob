@@ -20,14 +20,32 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Работа мечты</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function submitData() {
+            if ($('#name').val() === "") {
+                alert($('#name').attr('title'));
+                return false;
+            }
+            if ($('#select').val() === "0") {
+                alert($('#select').attr('title'));
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/job4j_dreamjob/city',
+                dataType: 'json'
+            }).done(function (data) {
+                for(let i = 0; i < data.length; i++) {
+                    $('#select option:last').after('<option value=' + (i+1) +'>' + data[i] + '</option>');
+                }
+            })
+        })
+    </script>
 </head>
-<%
-    String id = request.getParameter("id");
-    Candidate candidate = new Candidate(0,"");
-    if (id != null) {
-        candidate = PsqlStore.instOf().findCandidateById(Integer.parseInt(id));
-    }
-%>
 <body>
 <div class="container pt-3">
     <div class="row">
@@ -64,12 +82,23 @@
                 Новый кандидат.
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidates.do?id=<%=candidate.getId()%>" method="post">
+                <form <% if (request.getParameter("id") == null) { %>
+                        action="<%=request.getContextPath()%>/candidates.do?id=0"
+                        <%} else { %>
+                        action="<%=request.getContextPath()%>/candidates.do?id=<%=request.getParameter("id")%>"
+                        <% }%>
+                        method="post">
                     <div class="form-group">
                         <label>Имя кандидата</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" id="name" name="name" title="Введите имя.">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <div class="form-group">
+                        <label>город</label>
+                        <select class="form-control" id="select" name="city" title="Выбирите город.">
+                            <option value="0">Выберите город</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="return submitData()">Сохранить</button>
                 </form>
             </div>
         </div>

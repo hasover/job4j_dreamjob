@@ -18,6 +18,24 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Работа мечты</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function validate() {
+            if ($('#name').val() === "") {
+                alert($('#name').attr('title'));
+                return false;
+            }
+            if ($('#email').val() === "") {
+                alert($('#email').attr('title'));
+                return false;
+            }
+            if ($('#password').val() === "") {
+                alert($('#password').attr('title'));
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="container pt-3">
@@ -57,17 +75,17 @@
                 <form action="<%=request.getContextPath()%>/reg.do" method="post">
                     <div class="form-group">
                         <label>Имя пользователя</label>
-                        <input type="text" class="form-control" name="name" required>
+                        <input type="text" class="form-control" name="name" title="Введите имя." id="name">
                     </div>
                     <div class="form-group">
                         <label>Почта</label>
-                        <input type="text" class="form-control" name="email" required>
+                        <input type="text" class="form-control" name="email" title="Введите почту." id="email">
                     </div>
                     <div class="form-group">
                         <label>Пароль</label>
-                        <input type="text" class="form-control" name="password" required>
+                        <input type="text" class="form-control" name="password" title="Введите пароль." id="password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                    <button type="submit" class="btn btn-primary" onclick="return validate()">Зарегистрироваться</button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">
                             <c:out value="${error}"/>

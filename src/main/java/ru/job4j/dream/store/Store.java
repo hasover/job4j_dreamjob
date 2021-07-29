@@ -16,5 +16,6 @@ public interface Store {
     Candidate findCandidateById(int id);
     User findUserById(int id);
     User findUserByMail(String mail);
+    Collection<String> findAllCities();
     void removeCandidate(int id);
 }

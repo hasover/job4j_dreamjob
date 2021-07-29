@@ -30,6 +30,7 @@ public class CandidateServletTest {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Mockito.when(request.getParameter("id")).thenReturn("0");
         Mockito.when(request.getParameter("name")).thenReturn("n");
+        Mockito.when(request.getParameter("city")).thenReturn("1");
 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 

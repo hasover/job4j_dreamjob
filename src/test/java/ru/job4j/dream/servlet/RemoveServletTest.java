@@ -23,7 +23,7 @@ public class RemoveServletTest {
     @Test
     public void test() throws ServletException, IOException {
         Store store = MemStore.instOf();
-        Candidate candidate = new Candidate(0, "remove");
+        Candidate candidate = new Candidate(0, "remove", 1);
         store.save(candidate);
 
         PowerMockito.mockStatic(PsqlStore.class);

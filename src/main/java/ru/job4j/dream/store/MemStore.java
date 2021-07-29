@@ -18,6 +18,7 @@ public class MemStore implements Store {
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
+    private final Map<Integer, String> cities = new ConcurrentHashMap<>();
 
     private MemStore() {
         posts.put(1, new Post(1, "Junior Java Job",
@@ -26,12 +27,15 @@ public class MemStore implements Store {
                 "Middle required", LocalDate.now().minusDays(1)));
         posts.put(3, new Post(3, "Senior Java Job",
                 "Senior required", LocalDate.now().minusDays(2)));
-        candidates.put(1, new Candidate(1, "Junior Java"));
-        candidates.put(2, new Candidate(2, "Middle Java"));
-        candidates.put(3, new Candidate(3, "Senior Java"));
+        candidates.put(1, new Candidate(1, "Junior Java",1));
+        candidates.put(2, new Candidate(2, "Middle Java",1));
+        candidates.put(3, new Candidate(3, "Senior Java",1));
         users.put(1, new User(1, "first", "first@first", "first"));
         users.put(2, new User(2, "second", "second@second", "second"));
         users.put(3, new User(3, "third", "thirs@third", "third"));
+        cities.put(1, "Msk");
+        cities.put(2, "Petersburg");
+        cities.put(3, "Kazan");
     }
 
     public static MemStore instOf() {
@@ -79,7 +83,6 @@ public class MemStore implements Store {
         }
         users.put(user.getId(), user);
     }
-
     @Override
     public Candidate findCandidateById(int id) {
         return candidates.get(id);
@@ -103,5 +106,10 @@ public class MemStore implements Store {
     @Override
     public void removeCandidate(int id) {
         candidates.remove(id);
+    }
+
+    @Override
+    public Collection<String> findAllCities() {
+        return cities.values();
     }
 }
