@@ -96,7 +96,7 @@
                         <td>
                             <img src='<c:url value="/download?id=${candidate.id}"/>' width="100px" height="100px" />
                         </td>
-                        <td class="city_id" id='<c:url value="${candidate.city_id}"/>'>
+                        <td class="city_id" id='<c:url value="${candidate.cityId}"/>'>
                         </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">

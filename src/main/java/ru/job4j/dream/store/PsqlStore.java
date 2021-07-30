@@ -179,7 +179,7 @@ public class PsqlStore implements Store {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = (?), city_id = ? WHERE id = (?)")) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCity_id());
+            ps.setInt(2, candidate.getCityId());
             ps.setInt(3, candidate.getId());
             ps.execute();
         } catch (Exception e) {
@@ -192,7 +192,7 @@ public class PsqlStore implements Store {
             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name, city_id) VALUES (?,?)",
                     PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCity_id());
+            ps.setInt(2, candidate.getCityId());
             ps.execute();
             try(ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
